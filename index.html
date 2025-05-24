@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AiFindr – Discover AI Tools</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logos/favicon.png" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script defer src="theme.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 sticky-top">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="assets/logos/logo-ai.png" alt="AiFindr Logo" height="32" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
+            aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="bookmarks.html">Bookmarks</a></li>
+                <li class="nav-item"><a class="nav-link" href="top-tools.html">Top Tools</a></li>
+                <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                <div class="form-check form-switch d-flex align-items-center" style="gap: 0.5rem;">
+                    <input class="form-check-input" type="checkbox" id="themeToggle" />
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Search & Filter -->
+    <div class="container my-4">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-8">
+                <input type="text" id="searchInput" class="form-control form-control-lg"
+                    placeholder="Search for AI tools..." aria-label="Search for AI tools" />
+            </div>
+            <div class="col-md-4">
+                <select id="categoryFilter" class="form-select form-select-lg" aria-label="Filter by category">
+                    <option value="">All Categories</option>
+                    <option value="Image">Image</option>
+                    <option value="Video">Video</option>
+                    <option value="Code">Code</option>
+                    <option value="Chat">Chat</option>
+                    <option value="Productivity">Productivity</option>
+                    <option value="Writing">Writing</option>
+                    <option value="Audio">Audio</option>
+                    <option value="Research">Research</option>
+                    <option value="Education">Education</option>
+                    <option value="LLM">LLM</option>
+                    <option value="3D">3D</option>
+                    <option value="Presentation">Presentation</option>
+                    <option value="Design">Design</option>
+                    <option value="Automation">Automation</option>
+                    <option value="Agent">Agent</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Search">Search</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Cards Grid -->
+    <div class="container">
+        <div id="toolsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <!-- Tool cards injected here by JS -->
+        </div>
+    </div>
+
+    <!-- Floating Add Tool Button -->
+    <button class="btn btn-primary btn-floating position-fixed bottom-0 end-0 m-4" data-bs-toggle="modal"
+        data-bs-target="#addToolModal" aria-label="Add new AI tool" title="Add Tool">
+        +
+    </button>
+
+    <!-- Add Tool Modal -->
+    <div class="modal fade" id="addToolModal" tabindex="-1" aria-labelledby="addToolModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="addToolForm" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addToolModalLabel">Add New AI Tool</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="name" class="form-control mb-3" placeholder="Tool Name" required />
+                    <input type="url" name="url" class="form-control mb-3" placeholder="Website URL" required />
+                    <textarea name="description" class="form-control mb-3" placeholder="Short Description" required
+                        rows="3"></textarea>
+                    <select name="category" class="form-select mb-3" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Image">Image</option>
+                        <option value="Video">Video</option>
+                        <option value="Code">Code</option>
+                        <option value="Chat">Chat</option>
+                        <option value="Productivity">Productivity</option>
+                        <option value="Writing">Writing</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Research">Research</option>
+                        <option value="Education">Education</option>
+                        <option value="LLM">LLM</option>
+                        <option value="3D">3D</option>
+                        <option value="Presentation">Presentation</option>
+                        <option value="Design">Design</option>
+                        <option value="Automation">Automation</option>
+                        <option value="Agent">Agent</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Search">Search</option>
+                    </select>
+                    <input type="text" name="tags" class="form-control mb-3" placeholder="Tags (comma-separated)" />
+                    <input type="url" name="logo" class="form-control mb-3" placeholder="Logo Image URL" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success w-100">Add Tool</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

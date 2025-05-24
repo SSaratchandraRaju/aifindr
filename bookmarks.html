@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookmarked Tools – AiFindr</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logos/favicon.png" />
+
+    <script defer src="js/theme.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top px-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="assets/logos/logo-ai.png" alt="AiFindr Logo" height="32" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Bookmarks</a></li>
+                <li class="nav-item"><a class="nav-link" href="top-tools.html">Top Tools</a></li>
+                <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                <div class="form-check form-switch d-flex align-items-center" style="gap: 0.5rem;">
+                    <input class="form-check-input" type="checkbox" id="themeToggle" />
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-4" style="padding-top: 80px;">
+        <h3 class="mb-4">⭐ Bookmarked Tools</h3>
+        <div id="bookmarksGrid" class="row g-4">
+            <!-- Cards will be injected here -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        function renderBookmarkedTools(tools) {
+            const container = document.getElementById("bookmarksGrid");
+            container.innerHTML = "";
+
+            const bookmarked = tools.filter(t => t.bookmarked);
+
+            if (bookmarked.length === 0) {
+                container.innerHTML = `<div class="text-center text-muted py-5">
+                        <i class="bi bi-bookmark-star" style="font-size: 2rem;"></i>
+                        <p class="mt-3">No tools bookmarked yet</p>
+                    </div>`;
+                return;
+            }
+
+            bookmarked.forEach(tool => {
+                const card = document.createElement("div");
+                card.className = "col-md-4";
+
+                card.innerHTML = `
+                   <div class="card h-100 shadow-sm">
+  <div class="position-relative tool-logo-container" style="height: 140px;">
+  <img src="${tool.logo}" 
+       class="card-img-top p-3 rounded-top-4 position-absolute top-0 start-0 w-100 h-100" 
+       alt="${tool.name}" 
+       style="object-fit: contain;" 
+       onerror="this.style.display='none'; 
+                if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('fallback-logo')) {
+                  const fallback = document.createElement('img');
+                  fallback.src = '/assets/logos/logo-ai.png';
+                  fallback.alt = 'Fallback Logo';
+                  fallback.className = 'fallback-logo position-absolute top-50 start-50 translate-middle';
+                  this.parentNode.appendChild(fallback);
+                }" />
+</div>
+  <div class="card-body d-flex flex-column">
+    <h5 class="card-title">${tool.name}</h5>
+    <p class="card-text">${tool.description}</p>
+    <div class="mb-2">
+      ${tool.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join("")}
+    </div>
+    <a href="${tool.url}" target="_blank" class="btn btn-outline-primary mt-auto">Visit</a>
+  </div>
+  <div class="card-footer d-flex justify-content-between align-items-center">
+    <span class="text-success fw-semibold">👍 ${tool.upvotes}</span>
+    <button
+  class="btn btn-sm bookmark-toggle d-flex align-items-center justify-content-center"
+  data-id="${tool.id}"
+  title="Remove Bookmark"
+  style="width: 38px; height: 32px; padding: 0; font-size: 1.2rem; border-radius: 0.25rem; background-color: teal; border: none;"
+>
+  ⛔
+</button>
+
+  </div>
+</div>
+
+
+                    `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Load tools from localStorage
+        let tools = JSON.parse(localStorage.getItem("aifindr_tools")) || [];
+        renderBookmarkedTools(tools);
+
+        // Un-bookmark toggle
+        document.addEventListener("click", (e) => {
+            if (e.target.closest(".bookmark-toggle")) {
+                const id = +e.target.closest(".bookmark-toggle").dataset.id;
+                tools = tools.map(t => t.id === id ? { ...t, bookmarked: false } : t);
+                localStorage.setItem("aifindr_tools", JSON.stringify(tools));
+                renderBookmarkedTools(tools);
+
+                // Show toast notification
+                const toast = new bootstrap.Toast(document.getElementById('bookmarkToast'));
+                document.getElementById('toastMessage').textContent = 'Bookmark removed';
+                toast.show();
+            }
+        });
+
+    </script>
+
+    <!-- Add this toast HTML at the bottom of your body -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="bookmarkToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <span id="toastMessage"></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

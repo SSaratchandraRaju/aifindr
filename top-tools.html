@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top AI Tools – AiFindr</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logos/favicon.png" />
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="js/theme.js"></script>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/logos/logo-ai.png" alt="AiFindr Logo" height="32" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="bookmarks.html">Bookmarks</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">Top Tools</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <div class="form-check form-switch d-flex align-items-center" style="gap: 0.5rem;">
+            <input class="form-check-input" type="checkbox" id="themeToggle" />
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-4" style="padding-top: 80px;">
+    <h3 class="mb-4">🔥 Top Voted AI Tools</h3>
+    <div id="topToolsGrid" class="row g-4">
+      <!-- Cards will be injected here -->
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="actionToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-body d-flex align-items-center">
+        <i class="bi me-2" id="toastIcon"></i>
+        <span id="toastMessage"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize theme if theme.js didn't load
+      if (!localStorage.getItem('theme')) {
+        localStorage.setItem('theme', 'light');
+      }
+      const currentTheme = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', currentTheme);
+
+      // Set theme toggle state
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.checked = currentTheme === 'dark';
+      }
+
+      // Initialize toast
+      const toast = new bootstrap.Toast(document.getElementById('actionToast'));
+
+      function showToast(message, isSuccess) {
+        const toastIcon = document.getElementById('toastIcon');
+        toastIcon.className = `bi ${isSuccess ? 'bi-check-circle-fill text-success' : 'bi-exclamation-triangle-fill text-warning'}`;
+        document.getElementById('toastMessage').textContent = message;
+        toast.show();
+      }
+
+      function renderTopTools(tools) {
+        const container = document.getElementById("topToolsGrid");
+        container.innerHTML = "";
+
+        if (tools.length === 0) {
+          container.innerHTML = `
+            <div class="col-12 text-center py-5">
+              <i class="bi bi-emoji-frown" style="font-size: 2rem;"></i>
+              <p class="mt-3 text-muted">No tools found</p>
+            </div>`;
+          return;
+        }
+
+        // Sort by upvotes
+        const sortedTools = [...tools].sort((a, b) => b.upvotes - a.upvotes);
+
+        sortedTools.forEach(tool => {
+          const card = document.createElement("div");
+          card.className = "col-md-4";
+
+          card.innerHTML = `
+            <div class="card h-100">
+              <div class="position-relative tool-logo-container" style="height: 140px;">
+  <img src="${tool.logo}" 
+       class="card-img-top p-3 rounded-top-4 position-absolute top-0 start-0 w-100 h-100" 
+       alt="${tool.name}" 
+       style="object-fit: contain;" 
+       onerror="this.style.display='none'; 
+                if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('fallback-logo')) {
+                  const fallback = document.createElement('img');
+                  fallback.src = '/assets/logos/logo-ai.png';
+                  fallback.alt = 'Fallback Logo';
+                  fallback.className = 'fallback-logo position-absolute top-50 start-50 translate-middle';
+                  this.parentNode.appendChild(fallback);
+                }" />
+</div>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${tool.name}</h5>
+                <p class="card-text">${tool.description}</p>
+                <div class="mb-2">
+                  ${tool.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join("")}
+                </div>
+                <a href="${tool.url}" target="_blank" class="btn btn-outline-primary mt-auto">Visit</a>
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <button class="btn btn-sm btn-outline-success upvote-btn" data-id="${tool.id}">
+                  <i class="bi bi-hand-thumbs-up"></i> ${tool.upvotes}
+                </button>
+                <button class="btn btn-sm ${tool.bookmarked ? 'btn-warning' : 'btn-outline-warning'} bookmark-btn" data-id="${tool.id}">
+                  <i class="bi ${tool.bookmarked ? 'bi-star-fill' : 'bi-star'}"></i>
+                </button>
+              </div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      }
+
+      // Load tools
+      let tools = JSON.parse(localStorage.getItem("aifindr_tools")) || [];
+      renderTopTools(tools);
+
+      // Handle interactions
+      document.addEventListener("click", (e) => {
+        const target = e.target.closest(".upvote-btn") || e.target.closest(".bookmark-btn");
+        if (!target) return;
+
+        const id = +target.dataset.id;
+
+        if (target.classList.contains("upvote-btn")) {
+          tools = tools.map(t => t.id === id ? { ...t, upvotes: t.upvotes + 1 } : t);
+          showToast("Upvote added!", true);
+        }
+        else if (target.classList.contains("bookmark-btn")) {
+          const wasBookmarked = tools.find(t => t.id === id).bookmarked;
+          tools = tools.map(t => t.id === id ? { ...t, bookmarked: !t.bookmarked } : t);
+          showToast(wasBookmarked ? "Bookmark removed" : "Bookmark added", true);
+        }
+
+        localStorage.setItem("aifindr_tools", JSON.stringify(tools));
+        renderTopTools(tools);
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard – AiFindr</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logos/favicon.png" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top px-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+            <img src="assets/logos/logo-ai.png" alt="AiFindr Logo" height="32" />
+        </a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="bookmarks.html">Bookmarks</a></li>
+                <li class="nav-item"><a class="nav-link" href="top-tools.html">Top Tools</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+                <div class="form-check form-switch d-flex align-items-center" style="gap: 0.5rem;">
+                    <input class="form-check-input" type="checkbox" id="themeToggle" />
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h3 class="mb-4">📊 Dashboard & Stats</h3>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-bg-primary text-center">
+                    <div class="card-body">
+                        <h4 id="totalTools">0</h4>
+                        <p>Total Tools Added</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="topVotedChart"></canvas>
+            </div>
+            <div class="col-md-12 mt-4">
+                <canvas id="tagFrequencyChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize theme if theme.js didn't load
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'light');
+        }
+        const currentTheme = localStorage.getItem('theme');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.checked = currentTheme === 'dark';
+
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+
+
+        const tools = JSON.parse(localStorage.getItem("aifindr_tools")) || [];
+
+        // Total tools
+        document.getElementById("totalTools").innerText = tools.length;
+
+        // Category/Tag frequency
+        const tagCounts = {};
+        tools.forEach(tool => {
+            tool.tags.forEach(tag => {
+                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+            });
+        });
+
+        const tagLabels = Object.keys(tagCounts);
+        const tagData = Object.values(tagCounts);
+
+        // Top 5 by upvotes
+        const topTools = [...tools]
+            .sort((a, b) => b.upvotes - a.upvotes)
+            .slice(0, 5);
+
+        const topToolNames = topTools.map(t => t.name);
+        const topToolVotes = topTools.map(t => t.upvotes);
+
+        // Chart 1: Tools per Tag
+        new Chart(document.getElementById("categoryChart"), {
+            type: "bar",
+            data: {
+                labels: tagLabels,
+                datasets: [{
+                    label: "Tools per Tag",
+                    data: tagData,
+                    backgroundColor: "#0d6efd"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: "Tools by Tag" }
+                }
+            }
+        });
+
+        // Chart 2: Top 5 Voted
+        new Chart(document.getElementById("topVotedChart"), {
+            type: "bar",
+            data: {
+                labels: topToolNames,
+                datasets: [{
+                    label: "Upvotes",
+                    data: topToolVotes,
+                    backgroundColor: "#198754"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: "Top 5 Voted Tools" },
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Chart 3: Tag frequency (word cloud-style but in bar)
+        new Chart(document.getElementById("tagFrequencyChart"), {
+            type: "bar",
+            data: {
+                labels: tagLabels,
+                datasets: [{
+                    label: "Tag Frequency",
+                    data: tagData,
+                    backgroundColor: "#fd7e14"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: "Tag Frequency Distribution" },
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
