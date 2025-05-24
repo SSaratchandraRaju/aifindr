@@ -8,7 +8,7 @@ const mockTools = [
     logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
     url: "https://chat.openai.com/",
     upvotes: 120,
-    bookmarked: false
+    bookmarked: true
   },
   {
     id: 2,
@@ -198,7 +198,7 @@ const mockTools = [
   logo: "https://bolt.chat/favicon.ico",
   url: "https://bolt.chat/",
   upvotes: 85,
-  bookmarked: false
+  bookmarked: true
 },
 {
   id: 19,
@@ -232,7 +232,7 @@ const mockTools = [
   logo: "https://ideogram.ai/favicon.ico",
   url: "https://ideogram.ai/",
   upvotes: 122,
-  bookmarked: false
+  bookmarked: true
 },
 {
   id: 22,

@@ -17,22 +17,26 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top px-4">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-            <img src="assets/logos/logo-ai.png" alt="AiFindr Logo" height="32" />
-        </a>
-
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="bookmarks.html">Bookmarks</a></li>
-                <li class="nav-item"><a class="nav-link" href="top-tools.html">Top Tools</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-                <div class="form-check form-switch d-flex align-items-center" style="gap: 0.5rem;">
-                    <input class="form-check-input" type="checkbox" id="themeToggle" />
-                </div>
-            </ul>
-        </div>
-    </nav>
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/logos/logo-ai.png" alt="AiFindr Logo" height="32" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="bookmarks.html">Bookmarks</a></li>
+          <li class="nav-item"><a class="nav-link" href="top-tools.html">Top Tools</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+          <div class="form-check form-switch d-flex align-items-center" style="gap: 0.5rem;">
+            <input class="form-check-input" type="checkbox" id="themeToggle" />
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
     <div class="container my-4">
         <h3 class="mb-4">📊 Dashboard & Stats</h3>
