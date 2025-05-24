@@ -1,0 +1,61 @@
+<footer class="mt-5 pt-4 pb-3 border-top" style="background-color: var(--color-bg-light); color: var(--color-text);">
+    <div class="container text-center text-md-start">
+        <div class="row align-items-center">
+
+            <!-- Brand Info -->
+            <div class="col-md-6 mb-3 mb-md-0">
+                <a href="index.html" class="d-inline-block mb-1" style="text-decoration: none;">
+                    <img src="assets/logos/footer.png " alt="AIFindr Logo" style="height: 32px;" />
+                </a>
+                <p class="small" style="color: var(--color-text-muted);">
+                    your go-to directory for discovering the latest AI tools!
+                </p>
+            </div>
+
+
+            <!-- Links and Contact -->
+            <div class="col-md-6 text-md-end">
+                <a href="https://github.com/SSaratchandraRaju" target="_blank" class="text-decoration-none me-3"
+                    style="color: var(--color-text-muted);">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+
+                <a href="mailto:ssaratchandraraju@gmail.com" class="text-decoration-none me-3"
+                    style="color: var(--color-text-muted);">
+                    <i class="bi bi-envelope"></i> Mail
+                </a>
+                <a href="https://wa.me/917729823720" target="_blank" class="text-decoration-none me-3"
+                    style="color: var(--color-text-muted);">
+                    <i class="bi bi-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://www.linkedin.com/in/s-saratchandra-raju/" target="_blank"
+                    class="text-decoration-none me-3" style="color: var(--color-text-muted);">
+                    <i class="bi bi-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://saratchandra-raju-sarikonda.vercel.app/" target="_blank" class="text-decoration-none"
+                    style="color: var(--color-text-muted);">
+                    <i class="bi bi-person-circle"></i> Portfolio
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Copyright -->
+        <div class="text-center mt-3 small" style="color: var(--color-text-muted);">
+            &copy; <span id="currentYear"></span> AIFindr. Built with ❤️ by
+            <a href="https://github.com/ssaratchandraraju" class="fw-medium text-decoration-none"
+                style="color: var(--color-primary);">
+                Saratchandra Raju
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const yearSpan = document.getElementById("currentYear");
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+        }
+    });
+</script>

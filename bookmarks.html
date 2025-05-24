@@ -137,6 +137,22 @@
             </div>
         </div>
     </div>
+    <div id="footer"></div>
 </body>
+
+<script>
+  // Load footer
+  fetch('footer.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('footer').innerHTML = html;
+
+      // Set the current year after footer is loaded
+      const yearSpan = document.getElementById('currentYear');
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+    });
+</script>
 
 </html>
